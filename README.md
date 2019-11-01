@@ -1,0 +1,2 @@
+# uk-leave-of-absences
+Extract a table listing absences away from UK based on Google Timeline data. Primary use case is https://www.gov.uk/government/publications/indefinite-leave-to-remain-calculating-continuous-period-in-uk
