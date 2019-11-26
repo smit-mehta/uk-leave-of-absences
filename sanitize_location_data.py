@@ -24,7 +24,7 @@ with open('data/sanitized_location_history.csv', 'w') as sanitized_location_hist
   for location in locations:
     num_locations_processed = num_locations_processed + 1
     if num_locations_processed % 100000 == 0:
-      print ("Processed %d location data points...", num_locations_processed)
+      print ("Processed %d location data points..." % num_locations_processed)
     
     day = date.fromtimestamp(float(location['timestampMs']) / 1000)
     lat = float(location['latitudeE7'])/10000000
@@ -50,4 +50,4 @@ with open('data/sanitized_location_history.csv', 'w') as sanitized_location_hist
       previous_lat = lat
       previous_long = long
   
-  print("Done! Sanitized data to %d location data points." , num_sanitized_locations_produced)
+  print("Done! Sanitized data to %d location data points." % num_sanitized_locations_produced)
