@@ -10,7 +10,8 @@ def SanitizeLocations(locations):
   # TODO: Pipe this as a flag or method arg.
   start_date = date(2014, 7, 20)
 
-  with open('data/sanitized_location_history.csv', 'w') as sanitized_location_history_file, open('data/missing_days.csv', 'w') as missing_days_file:
+  with open('data/sanitized_location_history.csv', 'w') as sanitized_location_history_file, \
+       open('data/missing_days.csv', 'w') as missing_days_file:
     output_csv_writer = csv.writer(sanitized_location_history_file)
     missing_days_csv_writer = csv.writer(missing_days_file)
     missing_days_csv_writer.writerow(["start_date", "end_date"])
@@ -41,7 +42,8 @@ def SanitizeLocations(locations):
     
       # Recording the days for which the data is missing in a separate file to audit.
       if (day - previous_available_day).days > 1:
-        missing_days_csv_writer.writerow([previous_available_day.strftime("%Y/%m/%d"), day.strftime("%Y/%m/%d")])
+        missing_days_csv_writer.writerow(
+                [previous_available_day.strftime("%Y/%m/%d"), day.strftime("%Y/%m/%d")])
       previous_available_day = day;
 
       # Record only those rows where there is an interesting location change.
