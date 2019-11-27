@@ -16,8 +16,8 @@ def SanitizeLocations(locations):
     missing_days_csv_writer.writerow(["start_date", "end_date"])
 
     previous_day = start_date
-    previous_lat = -9999999
-    previous_long = -9999999
+    previous_latitude = -9999999
+    previous_longitude = -9999999
     previous_available_day = start_date
     num_locations_processed = 0
     num_sanitized_locations_produced = 0
@@ -28,8 +28,8 @@ def SanitizeLocations(locations):
         print ("Processed %d location data points..." % num_locations_processed)
     
       day = date.fromtimestamp(float(location['timestampMs']) / 1000)
-      lat = float(location['latitudeE7'])/10000000
-      long = float(location['longitudeE7'])/10000000
+      latitude = float(location['latitudeE7'])/10000000
+      longitude = float(location['longitudeE7'])/10000000
 
       # Discarding irrelevant data.
       if day < start_date:
@@ -45,11 +45,11 @@ def SanitizeLocations(locations):
       previous_available_day = day;
 
       # Record only those rows where there is an interesting location change.
-      if (abs(lat - previous_lat) > 0.3 or abs(long - previous_long) > 0.3):
-        output_csv_writer.writerow([day.strftime("%Y/%m/%d"), lat, long]) 
+      if (abs(latitude - previous_latitude) > 0.3 or abs(longitude - previous_longitude) > 0.3):
+        output_csv_writer.writerow([day.strftime("%Y/%m/%d"), latitude, longitude]) 
         num_sanitized_locations_produced = num_sanitized_locations_produced + 1
-        previous_lat = lat
-        previous_long = long
+        previous_latitude = latitude
+        previous_longitude = longitude
   
     print("Sanitized data to %d location data points." % num_sanitized_locations_produced)
 
