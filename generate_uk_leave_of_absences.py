@@ -34,7 +34,7 @@ def SanitizeLocations(locations):
       latitude = float(location['latitudeE7'])/10000000
       longitude = float(location['longitudeE7'])/10000000
 
-      # Discarding data outside request time range.
+      # Discarding data outside requested time range.
       if day < start_date or day > end_date:
         continue
     
@@ -72,10 +72,20 @@ def TransformLocationsToCountries():
       date_with_country_file_writer.writerow([row[0], country])
 
 def NormalizeLeaveOfAbsences():
-  return
+  with open('data/date_with_country.csv', 'r') as date_with_country_file, \
+       open('data/uk_leave_of_absences.csv', 'w') as uk_leave_of_absences_file:
+    date_with_country_data = csv.reader(date_with_country_file)
+    uk_leave_of_absences_file_writer = csv.writer(uk_leave_of_absences_file)
+  
+    previous_country = "non-existent-country"
+
+    for row in date_with_country_data:
+      country = row[1]
+      if country != previous_country:
+        uk_leave_of_absences_file_writer.writerow([row[0], row[1]])
+        previous_country = country
 
 if __name__== "__main__":
-  
   print("Loading raw location data...")
   raw_locations = ReadRawLocations()
 
