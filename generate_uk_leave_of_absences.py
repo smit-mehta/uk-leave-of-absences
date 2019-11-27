@@ -1,5 +1,6 @@
 import csv
 import json
+import googlemaps
 from datetime import date
 
 def ReadRawLocations():
@@ -56,7 +57,18 @@ def SanitizeLocations(locations):
     print("Sanitized data to %d location data points." % num_sanitized_locations_produced)
 
 def TransformLocationsToCountries():
-  return
+  # gmaps = googlemaps.Client(key='foobar')
+
+  with open('data/sanitized_location_history.csv', 'r') as sanitized_location_history_file, \
+       open('data/date_with_country.csv', 'w') as date_with_country_file:
+    sanitized_location_history = csv.reader(sanitized_location_history_file)
+    date_with_country_file_writer = csv.writer(date_with_country_file)
+
+    for row in sanitized_location_history:
+      # reverse_geocode_result = gmaps.reverse_geocode((row[1],row[2]))
+      # country = reverse_geocode_result[-1]["formatted_address"]
+      country = "United Kingdom"
+      date_with_country_file_writer.writerow([row[0], country])
 
 def NormalizeLeaveOfAbsences():
   return
