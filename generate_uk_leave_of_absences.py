@@ -10,6 +10,7 @@ def ReadRawLocations():
 def SanitizeLocations(locations):
   # TODO: Pipe this as a flag or method arg.
   start_date = date(2014, 7, 20)
+  end_date = date(2019, 12, 1)
 
   with open('data/sanitized_location_history.csv', 'w') as sanitized_location_history_file, \
        open('data/missing_days.csv', 'w') as missing_days_file:
@@ -33,8 +34,8 @@ def SanitizeLocations(locations):
       latitude = float(location['latitudeE7'])/10000000
       longitude = float(location['longitudeE7'])/10000000
 
-      # Discarding irrelevant data.
-      if day < start_date:
+      # Discarding data outside request time range.
+      if day < start_date or day > end_date:
         continue
     
       # Discarding data with bad accuracy.
