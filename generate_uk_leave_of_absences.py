@@ -62,6 +62,9 @@ def TransformLocationsToCountries():
   with open("data/api_key.txt", "r") as key_file:  
     gmaps = googlemaps.Client(key=key_file.read())
 
+  cache_hits = 0
+  gmaps_api_calls = 0
+
   with open("data/sanitized_location_history.csv", "r") as sanitized_location_history_file, \
        open("data/date_with_country.csv", "w") as date_with_country_file:
     sanitized_location_history = csv.reader(sanitized_location_history_file)
@@ -73,9 +76,15 @@ def TransformLocationsToCountries():
       if country == countries.NON_CACHED_COUNTRY:
         # reverse_geocode_result = gmaps.reverse_geocode((row[1],row[2]))
         # country = reverse_geocode_result[-1]["formatted_address"]
+        gmaps_api_calls = gmaps_api_calls + 1
         country = "United Kingdom"
+      else:
+        cache_hits = cache_hits + 1
         
       date_with_country_file_writer.writerow([row[0], country])
+  
+  print("Processed %d data points with cached countries list, %d with GMaps API calls." % 
+          (cache_hits, gmaps_api_calls))
 
 def NormalizeLeaveOfAbsences():
   with open("data/date_with_country.csv", "r") as date_with_country_file, \
