@@ -92,16 +92,16 @@ def NormalizeLeaveOfAbsences():
         previous_country = country
 
 if __name__== "__main__":
-  print("Loading raw location data...")
+  print("\nStage 1 / 5: Loading raw location data...\n")
   raw_locations = ReadRawLocations()
 
-  print("Sanitizing raw location data...")
+  print("\nStage 2 / 5: Sanitizing raw location data...\n")
   SanitizeLocations(raw_locations)
 
-  print("Transforming location data to country...")
+  print("\nStage 3 / 5: Transforming location data to country...\n")
   TransformLocationsToCountries()
 
-  print("Normalizing leave of absences to generate the final report...")
+  print("\nStage 4 / 5: Normalizing leave of absences to generate the final report...\n")
   NormalizeLeaveOfAbsences()
 
-  print("Done! You can find the report at data/uk_leave_of_absences.csv")
+  print("\nStage 5 / 5: Done! You can find the report at data/uk_leave_of_absences.csv\n")
