@@ -1,3 +1,4 @@
+import countries
 import csv
 import json
 import googlemaps
@@ -66,9 +67,13 @@ def TransformLocationsToCountries():
     date_with_country_file_writer = csv.writer(date_with_country_file)
 
     for row in sanitized_location_history:
-      # reverse_geocode_result = gmaps.reverse_geocode((row[1],row[2]))
-      # country = reverse_geocode_result[-1]["formatted_address"]
-      country = "United Kingdom"
+      country = countries.GetCountryFromCachedCoordinates(row[1], row[2])
+      
+      if country == countries.NON_CACHED_COUNTRY:
+        # reverse_geocode_result = gmaps.reverse_geocode((row[1],row[2]))
+        # country = reverse_geocode_result[-1]["formatted_address"]
+        country = "United Kingdom"
+        
       date_with_country_file_writer.writerow([row[0], country])
 
 def NormalizeLeaveOfAbsences():
