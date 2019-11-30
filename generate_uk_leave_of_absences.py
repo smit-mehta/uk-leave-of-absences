@@ -5,16 +5,16 @@ import googlemaps
 from datetime import date
 
 def ReadRawLocations():
-  with open('data/location_history.json', 'r') as raw_location_history_file:
-    return json.load(raw_location_history_file)['locations']
+  with open("data/location_history.json", "r") as raw_location_history_file:
+    return json.load(raw_location_history_file)["locations"]
 
 def SanitizeLocations(locations):
   # TODO: Pipe this as a flag or method arg.
   start_date = date(2014, 7, 20)
   end_date = date(2019, 12, 1)
 
-  with open('data/sanitized_location_history.csv', 'w') as sanitized_location_history_file, \
-       open('data/missing_days.csv', 'w') as missing_days_file:
+  with open("data/sanitized_location_history.csv", "w") as sanitized_location_history_file, \
+       open("data/missing_days.csv", "w") as missing_days_file:
     output_csv_writer = csv.writer(sanitized_location_history_file)
     missing_days_csv_writer = csv.writer(missing_days_file)
     missing_days_csv_writer.writerow(["start_date", "end_date"])
@@ -31,16 +31,16 @@ def SanitizeLocations(locations):
       if num_locations_processed % 100000 == 0:
         print ("Processed %d location data points..." % num_locations_processed)
     
-      day = date.fromtimestamp(float(location['timestampMs']) / 1000)
-      latitude = float(location['latitudeE7'])/10000000
-      longitude = float(location['longitudeE7'])/10000000
+      day = date.fromtimestamp(float(location["timestampMs"]) / 1000)
+      latitude = float(location["latitudeE7"])/10000000
+      longitude = float(location["longitudeE7"])/10000000
 
       # Discarding data outside requested time range.
       if day < start_date or day > end_date:
         continue
     
       # Discarding data with bad accuracy.
-      if float(location['accuracy']) > 1000:
+      if float(location["accuracy"]) > 1000:
         continue
     
       # Recording the days for which the data is missing in a separate file to audit.
@@ -59,10 +59,11 @@ def SanitizeLocations(locations):
     print("Sanitized data to %d location data points." % num_sanitized_locations_produced)
 
 def TransformLocationsToCountries():
-  # gmaps = googlemaps.Client(key='foobar')
+  with open("data/api_key.txt", "r") as key_file:  
+    gmaps = googlemaps.Client(key=key_file.read())
 
-  with open('data/sanitized_location_history.csv', 'r') as sanitized_location_history_file, \
-       open('data/date_with_country.csv', 'w') as date_with_country_file:
+  with open("data/sanitized_location_history.csv", "r") as sanitized_location_history_file, \
+       open("data/date_with_country.csv", "w") as date_with_country_file:
     sanitized_location_history = csv.reader(sanitized_location_history_file)
     date_with_country_file_writer = csv.writer(date_with_country_file)
 
@@ -77,8 +78,8 @@ def TransformLocationsToCountries():
       date_with_country_file_writer.writerow([row[0], country])
 
 def NormalizeLeaveOfAbsences():
-  with open('data/date_with_country.csv', 'r') as date_with_country_file, \
-       open('data/uk_leave_of_absences.csv', 'w') as uk_leave_of_absences_file:
+  with open("data/date_with_country.csv", "r") as date_with_country_file, \
+       open("data/uk_leave_of_absences.csv", "w") as uk_leave_of_absences_file:
     date_with_country_data = csv.reader(date_with_country_file)
     uk_leave_of_absences_file_writer = csv.writer(uk_leave_of_absences_file)
   
